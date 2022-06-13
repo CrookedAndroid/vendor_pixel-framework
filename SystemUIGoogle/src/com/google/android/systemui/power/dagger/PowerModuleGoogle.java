@@ -28,7 +28,7 @@ import com.android.systemui.power.EnhancedEstimates;
 import com.android.systemui.power.PowerUI;
 import com.android.systemui.power.data.repository.PowerRepositoryModule;
 import com.android.systemui.statusbar.policy.BatteryController;
-import com.google.android.systemui.power.EnhancedEstimatesGoogleImpl;
+import com.google.android.systemui.power.EnhancedEstimatesGoogleOldImpl;
 import com.google.android.systemui.power.PowerNotificationWarningsGoogleImpl;
 
 import dagger.Binds;
@@ -59,7 +59,7 @@ public interface PowerModuleGoogle {
      *
      */
     @Binds
-    EnhancedEstimates bindEnhancedEstimates(EnhancedEstimatesGoogleImpl enhancedEstimates);
+    EnhancedEstimates bindEnhancedEstimates(EnhancedEstimatesGoogleOldImpl enhancedEstimates);
 
     /**
      *

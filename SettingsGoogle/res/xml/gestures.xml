@@ -40,6 +40,12 @@
         settings:controller="com.android.settings.gestures.SwipeToNotificationPreferenceController" />
 
     <Preference
+        android:key="power_button_torch_summary"
+        android:title="@string/power_button_torch_title"
+        android:fragment="com.android.settings.gestures.PowerButtonTorchSettings"
+        settings:controller="com.android.settings.gestures.PowerButtonTorchGesturePreferenceController" />
+
+    <Preference
         android:key="gesture_double_tap_power_input_summary"
         android:title="@string/double_tap_power_for_camera_title"
         android:fragment="com.android.settings.gestures.DoubleTapPowerSettings"
@@ -86,13 +92,6 @@
         android:fragment="com.android.settings.gestures.PickupGestureSettings"
         settings:searchable="false"
         settings:controller="com.android.settings.gestures.PickupGesturePreferenceController" />
-
-    <Preference
-        android:key="gesture_screen_off_udfps_input_summary"
-        android:title="@string/ambient_display_screen_off_udfps_title"
-        android:fragment="com.android.settings.gestures.ScreenOffUdfpsSettings"
-        settings:searchable="false"
-        settings:controller="com.android.settings.gestures.ScreenOffUdfpsPreferenceController" />
 
     <Preference
         android:key="gesture_power_menu_summary"

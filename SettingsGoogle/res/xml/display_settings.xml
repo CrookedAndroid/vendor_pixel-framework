@@ -58,6 +58,15 @@
             settings:widgetLayout="@null" />
 
         <Preference
+            android:key="themes"
+            android:title="@string/theme_settings_title"
+            android:summary="@string/theme_settings_summary" >
+            <intent android:action="android.intent.action.MAIN"
+                android:targetPackage="com.android.wallpaper"
+                android:targetClass="com.statix.android.customization.picker.StatixCustomizationPickerActivity" />
+        </Preference>
+
+        <Preference
             android:fragment="com.android.settings.dream.DreamSettings"
             android:key="screensaver"
             android:title="@string/screensaver_settings_title" />

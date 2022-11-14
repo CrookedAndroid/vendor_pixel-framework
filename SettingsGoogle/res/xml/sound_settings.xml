@@ -168,6 +168,13 @@
         android:order="-27"
         android:title="@string/vibrate_icon_title" />
 
+    <!-- Pulse music visualizer -->
+    <Preference
+        android:key="pulse_settings"
+        android:title="@string/pulse_settings"
+        android:summary="@string/pulse_settings_summary"
+        android:fragment="com.android.settings.sound.PulseSettings" />
+
     <DropDownPreference
         android:key="dock_audio_media"
         android:order="-25"

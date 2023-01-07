@@ -58,6 +58,12 @@
             settings:widgetLayout="@null" />
 
         <Preference
+            android:key="statusbar_category"
+            android:title="@string/statusbar_title"
+            android:summary="@string/statusbar_summary"
+            android:fragment="com.android.settings.display.StatusBarSettings" />
+
+        <Preference
             android:fragment="com.android.settings.dream.DreamSettings"
             android:key="screensaver"
             android:title="@string/screensaver_settings_title"
@@ -123,9 +129,30 @@
 
         <SwitchPreference
             android:key="peak_refresh_rate"
-            android:summary="@string/peak_refresh_rate_summary"
             android:title="@string/peak_refresh_rate_title"
-            settings:controller="com.android.settings.display.PeakRefreshRatePreferenceController" />
+            android:summary="@string/peak_refresh_rate_summary"
+            settings:controller="com.android.settings.display.PeakRefreshRatePreferenceController"/>
+
+        <SwitchPreference
+            android:key="show_refresh_rate"
+            android:title="@string/show_refresh_rate"
+            android:summary="@string/show_refresh_rate_summary"/>
+
+        <SwitchPreference
+            android:key="pref_key_peak_refresh_rate"
+            android:title="@string/force_high_refresh_rate_toggle"
+            android:summary="@string/force_high_refresh_rate_desc"/>
+
+    </PreferenceCategory>
+
+      <com.statix.support.preferences.CustomSystemSeekBarPreference
+            android:key="qs_transparency"
+            android:title="@string/qs_transparency_title"
+            android:summary="@string/qs_transparency_summary"
+            android:defaultValue="10"
+            settings:interval="1"
+            android:max="100"         
+            android:min="1" />
 
         <SwitchPreference
             android:key="touch_sensitivity"
@@ -162,7 +189,5 @@
             android:fragment="com.android.settings.display.VrDisplayPreferencePicker"
             android:key="vr_display_pref"
             android:title="@string/display_vr_pref_title" />
-
-    </PreferenceCategory>
 
 </PreferenceScreen>

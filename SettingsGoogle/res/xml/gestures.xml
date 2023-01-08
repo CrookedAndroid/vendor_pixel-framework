@@ -39,6 +39,12 @@
         settings:controller="com.android.settings.gestures.PowerButtonTorchGesturePreferenceController" />
 
     <Preference
+        android:key="swipe_to_screenshot_summary"
+        android:title="@string/swipe_to_screenshot_title"
+        android:fragment="com.android.settings.gestures.SwipeToScreenshotGestureSettings"
+        settings:controller="com.android.settings.gestures.SwipeToScreenshotPreferenceController" />
+
+    <Preference
         android:key="gesture_swipe_down_fingerprint_input_summary"
         android:title="@string/fingerprint_swipe_for_notifications_title"
         android:fragment="com.android.settings.gestures.SwipeToNotificationSettings"

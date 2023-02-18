@@ -266,6 +266,9 @@ public abstract class SystemUIGoogleModule {
     @Binds
     abstract ControlsTileResourceConfiguration bindControlsTileResourceConfiguration(GoogleControlsTileResourceConfigurationImpl configuration);
 
+    @Binds
+    abstract ControlsTileResourceConfiguration bindControlsTileResourceConfiguration(GoogleControlsTileResourceConfigurationImpl configuration);
+
     @Provides
     @SysUISingleton
     static BcSmartspaceDataPlugin provideBcSmartspaceDataPlugin() {

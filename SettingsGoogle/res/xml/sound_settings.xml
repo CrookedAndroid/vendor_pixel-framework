@@ -150,6 +150,11 @@
         android:key="dial_pad_tones"
         android:order="-50"
         android:title="@string/dial_pad_tones_title" />
+        
+    <SwitchPreference
+        android:key="in_call_notifications"
+        android:title="@string/in_call_notifications_title"
+        android:order="-47"/>
 
     <SwitchPreference
         android:key="screen_locking_sounds"

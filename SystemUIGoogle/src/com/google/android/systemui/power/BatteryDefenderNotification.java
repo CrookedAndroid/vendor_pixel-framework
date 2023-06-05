@@ -21,10 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Binder;
-import android.os.IBinder;
+import android.os.IHwBinder;
 import android.os.RemoteException;
-import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.util.Log;
 
@@ -39,13 +37,9 @@ import java.text.NumberFormat;
 import java.time.Clock;
 import java.util.NoSuchElementException;
 
-import vendor.google.google_battery.IGoogleBattery;
+import vendor.google.google_battery.V1_1.IGoogleBattery;
 
 class BatteryDefenderNotification {
-
-    private static final boolean DEBUG = Log.isLoggable("BatteryDefenderNotification", 3);
-    private static final String TAG = "BatteryDefenderNotification";
-
     private final Context mContext;
     private final NotificationManager mNotificationManager;
     private final UiEventLogger mUiEventLogger;
@@ -85,7 +79,7 @@ class BatteryDefenderNotification {
             z = true;
         }
         boolean isFullyCharged = PowerUtils.isFullyCharged(intent);
-        Log.d(TAG, "isPlugged: " + z2 + " | isOverheated: " + z + " | defenderEnabled: " + mDefenderEnabled + " | isCharged: " + isFullyCharged);
+        Log.d("BatteryDefenderNotification", "isPlugged: " + z2 + " | isOverheated: " + z + " | defenderEnabled: " + mDefenderEnabled + " | isCharged: " + isFullyCharged);
         if (isFullyCharged && mPostNotificationVisible) {
             cancelPostNotification();
         }
@@ -141,7 +135,7 @@ class BatteryDefenderNotification {
             mNotificationManager.notifyAsUser("battery_defender", PowerUtils.POST_NOTIFICATION_ID, addAction.build(), UserHandle.ALL);
             mPostNotificationVisible = true;
         } else {
-            Log.w(TAG, "error getting trigger time");
+            Log.w("BatteryDefenderNotification", "error getting trigger time");
         }
         clearDefenderStartRecord();
     }
@@ -150,7 +144,7 @@ class BatteryDefenderNotification {
         if (mUiEventLogger != null) {
             mUiEventLogger.logWithPosition(batteryDefenderEvent, 0, (String) null, mBatteryLevel);
         }
-        Log.d(TAG, "resume charging: " + batteryDefenderEvent.mId);
+        Log.d("BatteryDefenderNotification", "resume charging: " + batteryDefenderEvent.mId);
         executeBypassActionWithAsync();
         mNotificationManager.cancelAsUser("battery_defender", PowerUtils.NOTIFICATION_ID, UserHandle.ALL);
         clearDefenderStartRecord();
@@ -161,15 +155,15 @@ class BatteryDefenderNotification {
             return;
         }
         AsyncTask.execute(() -> {
-            IBinder.DeathRecipient cbRecipient = new IBinder.DeathRecipient() {
+            IHwBinder.DeathRecipient cbRecipient = new IHwBinder.DeathRecipient() {
                 @Override
-                public final void binderDied() {
-                    Log.d(TAG, "serviceDied");
+                public void serviceDied(long j) {
+                    Log.d("BatteryDefenderNotification", "IHwBinder serviceDied");
                 }
             };
             IGoogleBattery initHalInterface = initHalInterface(cbRecipient);
             if (initHalInterface == null) {
-                Log.d(TAG, "Can not init hal interface");
+                Log.d("BatteryDefenderNotification", "Can not init hal interface");
             }
             try {
                 try {
@@ -177,7 +171,7 @@ class BatteryDefenderNotification {
                     initHalInterface.setProperty(3, 17, 1);
                     initHalInterface.setProperty(1, 17, 1);
                 } catch (RemoteException e) {
-                    Log.e(TAG, "setProperty error: " + e);
+                    Log.e("BatteryDefenderNotification", "setProperty error: " + e);
                 }
             } finally {
                 destroyHalInterface(initHalInterface, cbRecipient);
@@ -185,32 +179,26 @@ class BatteryDefenderNotification {
         });
     }
 
-    private static IGoogleBattery initHalInterface(IBinder.DeathRecipient deathReceiver) {
-        if (DEBUG) {
-            Log.d(TAG, "initHalInterface");
-        }
+    private IGoogleBattery initHalInterface(IHwBinder.DeathRecipient deathRecipient) {
         try {
-            IBinder binder = Binder.allowBlocking(ServiceManager.waitForDeclaredService("vendor.google.google_battery.IGoogleBattery/default"));
-            IGoogleBattery batteryInterface = null;
-            if (binder != null) {
-                batteryInterface = IGoogleBattery.Stub.asInterface(binder);
-                if (batteryInterface != null && deathReceiver != null) {
-                    binder.linkToDeath(deathReceiver, 0);
-                }
+            IGoogleBattery service = IGoogleBattery.getService();
+            if (service != null && deathRecipient != null) {
+                service.linkToDeath(deathRecipient, 0L);
             }
-            return batteryInterface;
-        } catch (RemoteException | NoSuchElementException | SecurityException e) {
-            Log.e(TAG, "failed to get Google Battery HAL: ", e);
+            return service;
+        } catch (RemoteException | NoSuchElementException e) {
+            Log.e("BatteryDefenderNotification", "failed to get Google Battery HAL: ", e);
             return null;
         }
     }
 
-    private static void destroyHalInterface(IGoogleBattery iGoogleBattery, IBinder.DeathRecipient deathRecipient) {
-        if (DEBUG) {
-            Log.d(TAG, "destroyHalInterface");
-        }
-        if (deathRecipient != null && iGoogleBattery != null) {
-            iGoogleBattery.asBinder().unlinkToDeath(deathRecipient, 0);
+    private void destroyHalInterface(IGoogleBattery iGoogleBattery, IHwBinder.DeathRecipient deathRecipient) {
+        if (deathRecipient != null) {
+            try {
+                iGoogleBattery.unlinkToDeath(deathRecipient);
+            } catch (RemoteException e) {
+                Log.e("BatteryDefenderNotification", "unlinkToDeath failed: ", e);
+            }
         }
     }
 

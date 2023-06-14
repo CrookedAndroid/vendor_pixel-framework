@@ -22,6 +22,7 @@ import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.external.CustomTile;
 import com.android.systemui.qs.tileimpl.QSFactoryImpl;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
+<<<<<<< HEAD
 import com.android.systemui.qs.tiles.AirplaneModeTile;
 import com.android.systemui.qs.tiles.AlarmTile;
 import com.android.systemui.qs.tiles.BluetoothTile;
@@ -50,9 +51,9 @@ import com.android.systemui.qs.tiles.ScreenRecordTile;
 import com.android.systemui.qs.tiles.UiModeNightTile;
 import com.android.systemui.qs.tiles.WifiTile;
 import com.android.systemui.qs.tiles.WorkModeTile;
+=======
+>>>>>>> 557e59a (SystemUIGoogle: Update qs modules for 13 QPR3)
 import com.android.systemui.util.leak.GarbageMonitor;
-import com.google.android.systemui.qs.tiles.BatterySaverTileGoogle;
-import com.google.android.systemui.qs.tiles.ReverseChargingTile;
 
 // Custom
 import com.android.systemui.qs.tiles.PowerShareTile;
@@ -61,17 +62,33 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import dagger.Lazy;
+import java.util.Map;
 
+/**
+ * A factory that creates Quick Settings tiles based on a tileSpec
+ *
+ * To create a new tile within SystemUI, the tile class should extend {@link QSTileImpl} and have
+ * a public static final TILE_SPEC field which serves as a unique key for this tile. (e.g. {@link
+ * com.android.systemui.qs.tiles.DreamTile#TILE_SPEC})
+ *
+ * After, create or find an existing Module class to house the tile's binding method (e.g. {@link
+ * com.android.systemui.accessibility.AccessibilityModule}). If creating a new module, add your
+ * module to the SystemUI dagger graph by including it in an appropriate module.
+ */
 
 @SysUISingleton
 public class QSFactoryImplGoogle extends QSFactoryImpl {
+<<<<<<< HEAD
     private final Provider<BatterySaverTileGoogle> mBatterySaverTileGoogleProvider;
     private final Provider<ReverseChargingTile> mReverseChargingTileProvider;
+=======
+>>>>>>> 557e59a (SystemUIGoogle: Update qs modules for 13 QPR3)
 
     @Inject
     public QSFactoryImplGoogle(
             Lazy<QSHost> qsHostLazy,
             Provider<CustomTile.Builder> customTileBuilderProvider,
+<<<<<<< HEAD
             Provider<WifiTile> wifiTileProvider,
             Provider<InternetTile> internetTileProvider,
             Provider<BluetoothTile> bluetoothTileProvider,
@@ -151,3 +168,10 @@ public class QSFactoryImplGoogle extends QSFactoryImpl {
         return super.createTileInternal(str);
     }
 }
+=======
+            Map<String, Provider<QSTileImpl<?>>> tileMap) {
+        super(qsHostLazy,
+                customTileBuilderProvider, tileMap);
+   }
+}
+>>>>>>> 557e59a (SystemUIGoogle: Update qs modules for 13 QPR3)
